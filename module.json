@@ -1,0 +1,41 @@
+{
+    "$schema": "https://schemas.liberu.dev/module/v1.json",
+    "name": "ecommerce-returns-livewire",
+    "display_name": "Returns Livewire",
+    "description": "Livewire 4 storefront returns presenting the return requests owned by liberusoftware/ecommerce-returns: a shopper's own returns and nobody else's, a request whose returnable quantity is read on the server every time and never accepted from the browser, a reason chosen from a closed set of slugs, and a note that goes in and cannot come back out.",
+    "version": "0.1.0",
+    "category": "presentation",
+    "provider": "Liberu\\Ecommerce\\Returns\\Livewire\\ReturnsLivewireServiceProvider",
+    "requires": {
+        "php": "^8.5",
+        "laravel": "^13.0",
+        "packages": {
+            "liberusoftware/ecommerce-returns": "^0.1"
+        }
+    },
+    "capabilities": [
+        "ecommerce.returns.livewire"
+    ],
+    "default_enabled": false,
+    "features": [
+        "A shopper's own returns, scoped to the signed-in account before anything else",
+        "A return addressed by its RMA number, never by an incrementing id",
+        "Somebody else's RMA number answered exactly as one that was never minted",
+        "A signed-out visitor shown a sign-in prompt rather than a 404, so no answer is an oracle",
+        "Store-scoped reads, with a bound comparison rather than a null one",
+        "Returnable quantity read on the server every request, never accepted from the browser",
+        "An order line the shopper does not own refused with the same words as one that does not exist",
+        "Reasons validated by identity against the domain's closed set of slugs",
+        "A shopper's note accepted, refused rather than truncated, and unable to travel back out",
+        "The domain's quantity refusal surfaced in words rather than silently capped",
+        "Cancellation of a request offered only where the state machine will accept it",
+        "Approving, receiving, inspecting and resolving left to staff",
+        "A return closed to further goods says what to do instead of showing a dead end",
+        "Only the statuses the domain publishes are ever rendered",
+        "No amount a shopper can set: what was refunded is a sum over rows",
+        "Every public property locked, with no exceptions list",
+        "Money rendered from integer minor units by string arithmetic",
+        "A live region for every outcome, and an alert for every refusal",
+        "Theme-overridable views, translations and configuration"
+    ]
+}
