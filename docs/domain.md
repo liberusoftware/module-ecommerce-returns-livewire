@@ -28,10 +28,10 @@ Two handles, and nothing else:
 | `ReturnDetail::$number`, `ReturnPage::$number` | `RMA-` and twelve hex characters | the domain, minted from 48 bits of CSPRNG output |
 | `StartReturn::$orderNumber`, `StartReturnPage::$orderNumber` | the purchase's own public handle | the module that owns purchases, through the host |
 
-**No incrementing id appears anywhere in this package** — not as a property, not
-as a mount parameter, not in a URL, not in the rendered markup. An id on a
-customer-facing page is an enumeration of everybody's records, which is the
-entire argument that gave both a handle in the first place.
+**No incrementing id travels as state.** Not as a component property, not as a
+mount parameter, not in a URL, and not as the handle any link or lookup is built
+from. An id in a customer-facing URL is an enumeration of everybody's records,
+which is the entire argument that gave both a handle in the first place.
 `tests/Feature/IdentityTest.php` asserts that by reflection over every registered
 component, and again by walking the rendered markup for the attribute a link is
 built from.
@@ -39,6 +39,22 @@ built from.
 There is no customer id, store id, team id, order id or order line id on any
 component, and no mount parameter for one. Those are resolved by the server on
 every request, so there is nowhere for them to arrive from.
+
+### Two row ids do appear in markup, and neither is a handle
+
+Being exact about this, because "no id anywhere" is the kind of claim that is
+easier to write than to keep:
+
+| Where | What | Why it is not the thing above |
+| --- | --- | --- |
+| `return-detail.blade.php` — `wire:key` and `data-return-line` | the shopper's **own** return line's row id | A DOM key, so focus survives a re-render. Nothing accepts it back: there is no method on any component here that takes a return line id, and it names a row already inside a record the query proved is theirs. |
+| `start-return.blade.php` — `wire:key`, `data-start-line`, and the hidden `line` field | the **order line id**, from the resolved purchase | This one *is* posted back, and it is the only id that is. It is checked **by identity** against the lines `OrderSource` returned for this shopper's purchase inside the write, so an id that is not theirs and an id that names nothing get the same words. See §3. |
+
+Neither is a lookup key a browser can point at a record. The purchase is
+resolved from the signed-in account *before* the posted line id is looked at,
+and the return is resolved from the RMA number against a query already narrowed
+to the customer. An id that arrives is never the thing that decides whose record
+is read.
 
 ### Three controls, in this order
 
